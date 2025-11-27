@@ -9,6 +9,7 @@ class AssetRepository
      */
     protected $mockAssets = [
         [
+            'id'          => 1,
             'code'        => 'REA25080006',
             'employee_id' => 'DTH1935',
             'name'        => 'ชัชวาล ผาสุริวงศ์',
@@ -18,6 +19,7 @@ class AssetRepository
             'status'      => 'ยกเลิก',
         ],
         [
+            'id'          => 2,
             'code'        => 'REA25090017',
             'employee_id' => 'DTH2044',
             'name'        => 'ศุภชัย อานันทเกียรติ',
@@ -27,6 +29,7 @@ class AssetRepository
             'status'      => 'กำลังดำเนินการ',
         ],
         [
+            'id'          => 3,
             'code'        => 'REA25100002',
             'employee_id' => 'DTH1850',
             'name'        => 'กฤติเดช วงศ์เพ็ญ',
@@ -36,6 +39,7 @@ class AssetRepository
             'status'      => 'พร้อมใช้งาน',
         ],
         [
+            'id'          => 4,
             'code'        => 'REA25100033',
             'employee_id' => 'DTH2011',
             'name'        => 'ภัทรพล รุ่งสว่าง',
@@ -45,6 +49,7 @@ class AssetRepository
             'status'      => 'พร้อมใช้งาน',
         ],
         [
+            'id'          => 5,
             'code'        => 'REA25110012',
             'employee_id' => 'DTH1888',
             'name'        => 'สุนทร เกิดแก้ว',
@@ -54,6 +59,7 @@ class AssetRepository
             'status'      => 'กำลังดำเนินการ',
         ],
         [
+            'id'          => 6,
             'code'        => 'REA25120004',
             'employee_id' => 'DTH2100',
             'name'        => 'ปณต จิตรวิมล',
@@ -63,6 +69,7 @@ class AssetRepository
             'status'      => 'ชำรุด',
         ],
         [
+            'id'          => 7,
             'code'        => 'REA25130055',
             'employee_id' => 'DTH1677',
             'name'        => 'ฐิติพงศ์ ชูชาติ',
@@ -73,32 +80,16 @@ class AssetRepository
         ],
     ];
 
-    /**
-     * ส่งคืน Mock ทั้งหมด
-     */
-    public function getMockAssets()
-    {
-        return $this->mockAssets;
-    }
-
-    /**
-     * Alias ของ getMockAssets() สำหรับอ่านง่าย
-     */
-    public function mockList()
-    {
-        return $this->mockAssets;
-    }
-
-     public function getAssets()
+    public function getAssets()
     {
         return collect($this->mockAssets);
     }
-    
+
     /**
      * Find asset from mock by ID (ยังไม่มี id จริง)
      */
-    public function findByCode($code)
+    public function findByCode($id)
     {
-        return collect($this->mockAssets)->firstWhere('code', $code);
+        return collect($this->mockAssets)->firstWhere('id', $id);
     }
 }

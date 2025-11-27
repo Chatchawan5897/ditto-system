@@ -22,9 +22,9 @@ class AssetService
     }
 
     // หาตาม code
-    public function findAsset($code)
+    public function findAsset($id)
     {
-        return $this->repo->findByCode($code);
+        return $this->repo->findByCode($id);
     }
 
     // ตัวอย่าง Logic เสริม เช่น Filter ตาม status

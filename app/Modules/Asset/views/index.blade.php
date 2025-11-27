@@ -13,6 +13,6 @@
         id="roles-table" 
     /> --}}
 
-    <livewire:asset-table :items="$items" :headers="$headers" :columns="$columns" />
+    <livewire:asset-table :items="$items" :headers="$headers" :columns="$columns"  :actions="$actions"/>
 
 @endsection

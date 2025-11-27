@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -50,7 +51,7 @@
         .dropdown-menu {
             border-radius: 12px !important;
             padding: 8px 0;
-            box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
         }
 
         .dropdown-item {
@@ -82,7 +83,6 @@
             display: flex;
             min-height: 100vh;
         }
-
     </style>
 </head>
 
@@ -124,7 +124,6 @@
 
         {{-- FOOTER --}}
         @include('layouts.footer')
-
     @else
         {{-- ถ้าไม่ได้ login --}}
         <main class="content-area">
@@ -142,4 +141,5 @@
     @stack('scripts')
 
 </body>
+
 </html>
