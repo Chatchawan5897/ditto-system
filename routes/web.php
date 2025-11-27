@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 
+// ทำการ  Load routes ของ Modules Asset
+require base_path('app/Modules/Asset/routes.php');
 
 // =============================
 // LOGIN / LOGOUT
@@ -39,5 +41,4 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [HomeController::class, 'index'])
         ->name('dashboard.index');
-
 });
