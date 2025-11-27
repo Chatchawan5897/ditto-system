@@ -8,3 +8,6 @@ release/*   → เตรียมเวอร์ชันใหม่ (ถ้�
 
 email: admin@ditto.com
 password: 123456
+
+
+Minimal Modern

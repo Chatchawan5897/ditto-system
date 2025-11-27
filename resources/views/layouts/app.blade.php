@@ -20,7 +20,22 @@
         }
     </style>
 
+  <!-- 👇 ใส่ CSS ตรงนี้ -->
+    <style>
+        .dropdown-menu {
+            border-radius: 10px;
+            padding: 8px 0;
+        }
 
+        .dropdown-item {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f0f2f5;
+        }
+    </style>
 
     <style>
         html,
@@ -115,6 +130,62 @@
         }
     </style>
 
+<style>
+    body {
+        font-family: "Prompt", sans-serif;
+        background-color: #f8f9fb;
+    }
+
+    /* Sidebar */
+    .sidebar-minimal {
+        width: 220px;
+        min-height: 100vh;
+        background: #fff;
+        border-right: 1px solid #e9ecef;
+    }
+
+    .sidebar-minimal .list-group-item {
+        border: none;
+        transition: 0.2s;
+        color: #495057;
+        font-size: 15px;
+    }
+
+    .sidebar-minimal .list-group-item:hover {
+        background: #f1f3f5;
+        color: #212529;
+        border-radius: 6px;
+    }
+
+    /* Header profile dropdown */
+    .dropdown-menu {
+        border-radius: 12px !important;
+        padding: 8px 0;
+    }
+
+    .dropdown-item {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .dropdown-item:hover {
+        background: #f3f4f6;
+    }
+
+    /* Content */
+    .content-area {
+        padding: 20px 28px;
+        background: #f8f9fb;
+    }
+
+    /* Smooth shadows */
+    .card,
+    .dropdown-menu {
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
+    }
+</style>
+
+
 </head>
 
 <body class="bg-light">
@@ -160,8 +231,6 @@
 
         </div>
 
-        <!-- Footer -->
-        @include('layouts.footer')
 
         <!-- Toggle Sidebar Script สำหรับมือถือ -->
         <script>
@@ -189,6 +258,9 @@
             @yield('content')
         </main>
     @endauth
+
+    @include('layouts.footer')
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
