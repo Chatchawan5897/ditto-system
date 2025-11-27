@@ -10,6 +10,6 @@ class HomeController extends Controller
     public function index()
     {
         // dd("function index");
-        return view('home');
+        return view('dashboard.index');
     }
 }
