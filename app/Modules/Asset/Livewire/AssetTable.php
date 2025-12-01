@@ -3,23 +3,24 @@
 namespace App\Modules\Asset\Livewire;
 
 use Livewire\Component;
-use Illuminate\Contracts\View\View;
+use Livewire\WithPagination;     // <--- เพิ่มตรงนี้
+use App\Modules\Asset\Modules\Item;
 
 class AssetTable extends Component
 {
-    // public $items = [];
+    use WithPagination;          // <--- เปิดใช้งาน pagination
 
-    // public function mount($items = [])
-    // {
-    //     $this->items = $items;
-    // }
+    protected $paginationTheme = 'bootstrap'; // ใช้ Bootstrap pagination
 
-    public $items;
     public $headers;
     public $columns;
     public $actions;
+    public $filters = [];
+    public $items;
 
-    public function mount($items = [], $headers = [], $columns = [], $actions = null)
+    protected $listeners = ['filterUpdated' => 'applyFilter'];
+
+    public function mount($items = [], $headers = [], $columns = [], $actions = [])
     {
         $this->items   = $items;
         $this->headers = $headers;
@@ -27,8 +28,21 @@ class AssetTable extends Component
         $this->actions = $actions;
     }
 
+
+    // ฟังก์ชันที่ถูกเรียกเมื่อ filter เปลี่ยน
+    public function applyFilter($filters)
+    {
+        $this->filters = $filters;
+        $this->resetPage(); // รีเซ็ตกลับหน้าแรก
+    }
+
     public function render()
     {
-        return view('Asset::livewire.asset-table');
+        return view('Asset::livewire.asset-table', [
+            'items' => $this->items,
+            'headers' => $this->headers,
+            'columns' => $this->columns,
+            'actions' => $this->actions,
+        ]);
     }
 }

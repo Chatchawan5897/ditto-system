@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Livewire\Livewire;
+use App\Models\Menu;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +16,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        View::composer('*', function ($view) {
+            $view->with('menus', Menu::where('is_active', 1)
+                ->orderBy('order_index')
+                ->get());
+        });
+
         // ======================================================
         // 1) Register View Namespace สำหรับทุก Module อัตโนมัติ
         // ======================================================

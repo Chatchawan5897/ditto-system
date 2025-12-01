@@ -83,6 +83,43 @@
             display: flex;
             min-height: 100vh;
         }
+
+        /* ClickUp breadcrumb */
+        .cu-breadcrumb {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cu-breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        .cu-breadcrumb-item i {
+            font-size: 16px;
+            color: #6d6dfd;
+            /* สีม่วง ClickUp */
+        }
+
+        .cu-breadcrumb-separator {
+            color: #bbb;
+            font-weight: 300;
+            margin: 0 4px;
+        }
+
+        .cu-breadcrumb-link {
+            text-decoration: none;
+            color: #444;
+        }
+
+        .cu-breadcrumb-link:hover {
+            color: #000;
+        }
     </style>
 </head>
 
@@ -110,11 +147,16 @@
                 {{-- breadcrumb เฉพาะหน้าไม่ใช่ dashboard --}}
                 @if (!request()->routeIs('dashboard.index'))
                     <div class="container-fluid">
-                        <nav aria-label="breadcrumb" class="breadcrumb-custom mt-3 mb-3">
+                        {{-- <nav aria-label="breadcrumb" class="breadcrumb-custom mt-3 mb-3">
                             <ol class="breadcrumb mb-0">
                                 @yield('breadcrumb-items')
                             </ol>
-                        </nav>
+                        </nav> --}}
+                        <div class="cu-breadcrumb mt-3 mb-3">
+                            @yield('breadcrumb-items')
+                        </div>
+
+
                     </div>
                 @endif
 

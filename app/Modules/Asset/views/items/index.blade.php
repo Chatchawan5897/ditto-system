@@ -1,4 +1,3 @@
-{{-- ditto-system/app/Modules/Asset/views/index.blade.php --}}
 
 @extends('layouts.app')
 
@@ -24,13 +23,8 @@
         ],
     ]" />
 
-    {{-- ทำ filterข้อมูลจาก filter compoennt --}}
-    {{-- <livewire:filter target="asset-table" /> --}}
 
-    {{-- ทำตารางข้อมูลจาก table component --}}
-    {{-- <livewire:asset-table :items="$items" :headers="$headers" :columns="$columns" :actions="$actions" /> --}}
-
-
+    <livewire:asset-table :items="$items" :headers="$headers" :columns="$columns" :actions="$actions" />
 
 
 @endsection

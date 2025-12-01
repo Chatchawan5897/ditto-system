@@ -1,0 +1,35 @@
+services:
+  app:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: docker-php/Dockerfile
+    container_name: laravel-dittosystem
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    environment:
+      DB_HOST: host.docker.internal
+      DB_PORT: 5432
+      DB_DATABASE: ditto_assets_db
+      DB_USERNAME: chatchawan
+      DB_PASSWORD: password
+    networks:
+      - laravel-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: laravel-nginx-system
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker-nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel-network
+
+networks:
+  laravel-network:
+    driver: bridge

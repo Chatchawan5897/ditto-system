@@ -1,147 +1,154 @@
-<div id="sidebar">
+@php
+    $parents = $menus->whereNull('parent_id');
+    function childrenOf($menus, $parentId) {
+        return $menus->where('parent_id', $parentId);
+    }
+@endphp
 
-    <div class="text-center py-3 border-bottom fw-bold">
-        Ditto Backoffice
+<div class="notion-sidebar p-2">
+
+    {{-- Section Example --}}
+    <div class="sidebar-section">
+        <span class="section-badge bg-purple">D</span>
+        <span class="section-title">Ditto System</span>
     </div>
 
-   
+    {{-- Menu Loop --}}
+    @foreach ($parents as $parent)
+        @php
+            $childs = childrenOf($menus, $parent->id);
+            $menuId = "menu" . $parent->id;
+        @endphp
 
-    @php
-        // MOCK DATA MENU แบบ Minimal Modern
-        $menus = collect([
-            // ===== Dashboard =====
-            [
-                'id' => 1,
-                'title' => 'Dashboard',
-                'icon' => 'bi-speedometer2',
-                'url' => '/dashboard',
-                'parent_id' => null,
-            ],
-
-            // ===== Asset Management =====
-            [
-                'id' => 2,
-                'title' => 'Asset Management',
-                'icon' => 'bi-hdd-stack',
-                'parent_id' => null,
-            ],
-            [
-                'id' => 3,
-                'title' => 'Asset List',
-                'icon' => 'bi-dot',
-                'url' => '/assets',
-                'parent_id' => 2,
-            ],
-            [
-                'id' => 4,
-                'title' => 'Categories',
-                'icon' => 'bi-dot',
-                'url' => '/asset/categories',
-                'parent_id' => 2,
-            ],
-
-            // ===== Car Monitor =====
-            [
-                'id' => 5,
-                'title' => 'Car Monitor',
-                'icon' => 'bi-truck',
-                'parent_id' => null,
-            ],
-            [
-                'id' => 6,
-                'title' => 'Tracking',
-                'icon' => 'bi-dot',
-                'url' => '/car/tracking',
-                'parent_id' => 5,
-            ],
-            [
-                'id' => 7,
-                'title' => 'Maintenance',
-                'icon' => 'bi-dot',
-                'url' => '/car/maintenance',
-                'parent_id' => 5,
-            ],
-
-            // ===== Users =====
-            [
-                'id' => 8,
-                'title' => 'User Management',
-                'icon' => 'bi-people',
-                'parent_id' => null,
-            ],
-            [
-                'id' => 9,
-                'title' => 'Users',
-                'icon' => 'bi-dot',
-                'url' => '/users',
-                'parent_id' => 8,
-            ],
-            [
-                'id' => 10,
-                'title' => 'Roles',
-                'icon' => 'bi-dot',
-                'url' => '/roles',
-                'parent_id' => 8,
-            ],
-            [
-                'id' => 11,
-                'title' => 'Permissions',
-                'icon' => 'bi-dot',
-                'url' => '/permissions',
-                'parent_id' => 8,
-            ],
-
-            // ===== Settings =====
-            [
-                'id' => 12,
-                'title' => 'Settings',
-                'icon' => 'bi-gear',
-                'url' => '/settings',
-                'parent_id' => null,
-            ],
-        ]);
-
-        // PARENT MENU
-        $parents = $menus->whereNull('parent_id');
-
-        // CHILDREN HELPER
-        function getChildren($menus, $parentId)
-        {
-            return $menus->where('parent_id', $parentId);
-        }
-    @endphp
-
-
-    <div class="list-group list-group-flush">
-
-        @foreach ($parents as $parent)
-            @php
-                $children = getChildren($menus, $parent['id']);
-                $menuId = 'menu' . $parent['id'];
-            @endphp
-
-            @if ($children->count() > 0)
-                <a href="#{{ $menuId }}" data-bs-toggle="collapse"
-                    class="list-group-item list-group-item-action d-flex justify-content-between">
-                    <span><i class="bi {{ $parent['icon'] }} me-2"></i> {{ $parent['title'] }}</span>
-                    <i class="bi bi-chevron-down"></i>
-                </a>
-
-                <div class="collapse" id="{{ $menuId }}">
-                    @foreach ($children as $child)
-                        <a href="{{ $child['url'] }}" class="list-group-item list-group-item-action ps-5">
-                            <i class="bi {{ $child['icon'] }} me-2"></i>
-                            {{ $child['title'] }}
-                        </a>
-                    @endforeach
-                </div>
+        {{-- Parent --}}
+        <a
+            class="menu-item d-flex justify-content-between align-items-center"
+            @if ($childs->count() > 0)
+                data-bs-toggle="collapse"
+                href="#{{ $menuId }}"
             @else
-                <a href="{{ $parent['url'] }}" class="list-group-item list-group-item-action">
-                    <i class="bi {{ $parent['icon'] }} me-2"></i>
-                    {{ $parent['title'] }}
-                </a>
+                href="{{ $parent->route ? route($parent->route) : '#' }}"
             @endif
-        @endforeach
+        >
+            <div class="d-flex align-items-center">
+                {{-- FOLDER ICON --}}
+                <i class="bi bi-folder sidebar-folder-icon me-2"></i>
+                <span class="menu-main-text">{{ $parent->title }}</span>
+            </div>
 
-    </div>
+            @if ($childs->count() > 0)
+                <i class="bi bi-chevron-right toggle-arrow"></i>
+            @endif
+        </a>
+
+        {{-- Children --}}
+        @if ($childs->count() > 0)
+            <div class="collapse ms-3" id="{{ $menuId }}">
+                @foreach ($childs as $child)
+                    @php
+                        $href = '#';
+                        if ($child->route && Route::has($child->route)) {
+                            $href = route($child->route);
+                        }
+                    @endphp
+
+                    <a href="{{ $href }}" class="submenu-item d-flex align-items-center">
+                        <i class="bi bi-dot nested-icon-small"></i>
+                        {{ $child->title }}
+                    </a>
+
+                @endforeach
+            </div>
+        @endif
+    @endforeach
+
 </div>
+
+<style>
+    /* Sidebar container */
+.notion-sidebar {
+    width: 250px;
+    border-right: 1px solid #e5e7eb;
+    background: #ffffff;
+    height: 100vh;
+    overflow-y: auto;
+    font-family: "Inter", sans-serif;
+}
+
+/* -------- Section -------- */
+.sidebar-section {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    margin-bottom: 8px;
+}
+
+.section-badge {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+
+.bg-purple { background: #8b5cf6; }
+
+.section-title {
+    margin-left: 10px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* -------- Parent Menu -------- */
+.menu-item {
+    text-decoration: none !important;
+    color: #1e3a8a;  /* เมนูหลักสีฟ้าเข้ม */
+    padding: 8px 10px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.menu-item:hover {
+    background: #e0ecfd; /* ฟ้าอ่อน */
+}
+
+/* Folder icon */
+.sidebar-folder-icon {
+    color: #111 !important; /* ให้เป็นสีดำตามต้องการ */
+    font-size: 16px;
+}
+
+/* Remove underline */
+.menu-main-text,
+.submenu-item {
+    text-decoration: none !important;
+}
+
+/* Rotation arrow */
+.toggle-arrow {
+    color: #9ca3af;
+    transition: transform 0.2s ease;
+}
+
+/* -------- Submenu -------- */
+.submenu-item {
+    text-decoration: none !important;
+    color: #6b7280;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: block;
+}
+
+.submenu-item:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+/* Submenu bullet */
+.nested-icon-small {
+    font-size: 12px;
+    margin-right: 6px;
+    color: #6b7280;
+}
+
+</style>

@@ -14,6 +14,19 @@ class AuthController extends Controller
 
     public function doLogin(Request $request)
     {
+
+        // // *** TEST MODE – FORCE LOGIN ***
+        // // ล็อกอิน user id = 1 ทันที ไม่ต้องใส่รหัสผ่าน
+        // Auth::loginUsingId(1);
+
+        // return redirect()->route('dashboard.index');
+
+        if (app()->environment('local')) {
+            // login user id = 1 เฉพาะบนเครื่อง dev
+            Auth::loginUsingId(1);
+            return redirect()->route('dashboard.index');
+        }
+
         $credentials = $request->validate([
             'email' => 'required',
             'password' => 'required',
@@ -22,7 +35,6 @@ class AuthController extends Controller
         // Attempt login
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            // return redirect()->intended('/');
             return redirect()->route('dashboard.index');
         }
 

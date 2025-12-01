@@ -1,148 +1,157 @@
-@props([
-    'headers' => [],
-    'items' => [],
-    'columns' => [],
-    'actions' => null,
-    'showIndex' => true,
-    'autoActionHeader' => true,
-])
+<div>
+    @props([
+        'headers' => [],
+        'items' => [],
+        'columns' => [],
+        'actions' => null,
+    ])
 
-<div class="table-responsive" style="padding: 5px;">
-    <table {{ $attributes->merge(['class' => 'table table-bordered table-hover align-middle mb-0 custom-table']) }}>
-        <thead class="table-light">
-            <tr>
-                @if ($showIndex)
-                    <th class="text-center" style="width: 50px;">#</th>
-                @endif
-
-                @foreach ($headers as $header)
-                    <th class="text-center">{{ $header }}</th>
-                @endforeach
-
-                @if ($actions && $autoActionHeader)
-                    <th class="text-center" style="width: 150px;">จัดการ</th>
-                @endif
-            </tr>
-        </thead>
-
-        <tbody>
-            @forelse ($items as $index => $item)
-                @php
-                    // รองรับทั้ง Array และ Object
-                    $get = function($item, $key) {
-                        if (is_array($item)) return $item[$key] ?? '-';
-                        return data_get($item, $key, '-');
-                    };
-                @endphp
-
+    <div class="cu-table-wrapper p-2">
+        {{-- Header --}}
+        <table class="table cu-table align-middle mb-0">
+            <thead>
                 <tr>
-                    @if ($showIndex)
-                        <td class="text-center">{{ $index + 1 }}</td>
-                    @endif
-
-                    @foreach ($columns as $col)
-                        @php
-                            if ($col === 'full_name') {
-                                $value = trim(($get($item,'first_name').' '.$get($item,'last_name')));
-                            } else {
-                                $value = $get($item, $col);
-                            }
-                        @endphp
-
-                        <td class="text-center">{{ is_array($value) ? implode(', ', $value) : $value }}</td>
+                    @foreach ($headers as $header)
+                        <th class="cu-th">{{ $header }}</th>
                     @endforeach
 
                     @if ($actions)
-                        <td class="text-center">
-
-                            {{-- Desktop --}}
-                            <div class="d-none d-md-flex justify-content-center gap-1">
-
-                                @if (isset($actions['show']))
-                                    <a href="{{ str_replace('__ID__', $get($item,'id'), $actions['show']) }}"
-                                        class="btn btn-outline-google-green">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                @endif
-
-                                @if (isset($actions['edit']))
-                                    <a href="{{ str_replace('__ID__', $get($item,'id'), $actions['edit']) }}"
-                                        class="btn btn-outline-google-blue">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                @endif
-
-                                @if (isset($actions['delete']))
-                                    <form action="{{ str_replace('__ID__', $get($item,'id'), $actions['delete']) }}"
-                                        method="POST" onsubmit="return confirm('ต้องการลบใช่หรือไม่?')">
-                                        @csrf @method('DELETE')
-                                        <button class="btn btn-outline-google-red">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                @endif
-
-                            </div>
-
-                            {{-- Mobile --}}
-                            <div class="dropdown d-md-none">
-                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    @if (isset($actions['show']))
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ str_replace('__ID__', $get($item,'id'), $actions['show']) }}">
-                                                ดูข้อมูล
-                                            </a>
-                                        </li>
-                                    @endif
-
-                                    @if (isset($actions['edit']))
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ str_replace('__ID__', $get($item,'id'), $actions['edit']) }}">
-                                                แก้ไข
-                                            </a>
-                                        </li>
-                                    @endif
-
-                                    @if (isset($actions['delete']))
-                                        <li>
-                                            <form action="{{ str_replace('__ID__', $get($item,'id'), $actions['delete']) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('ต้องการลบใช่หรือไม่?')">
-                                                @csrf @method('DELETE')
-                                                <button class="dropdown-item text-danger">ลบ</button>
-                                            </form>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </div>
-
-                        </td>
+                        <th class="cu-th text-end" style="width: 80px;"></th>
                     @endif
                 </tr>
+            </thead>
 
-            @empty
-                <tr>
-                    <td colspan="{{ count($headers) + ($actions ? 1 : 0) + ($showIndex ? 1 : 0) }}"
-                        class="text-center text-muted">
-                        ไม่มีข้อมูล
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
+            <tbody>
+                @forelse ($items as $item)
+                    <tr class="cu-row">
 
-{{-- Pagination --}}
-@if ($items instanceof \Illuminate\Pagination\LengthAwarePaginator ||
-     $items instanceof \Illuminate\Pagination\Paginator)
-    <div class="d-flex justify-content-end mt-2">
-        {{ $items->withQueryString()->links() }}
+                        @foreach ($columns as $col)
+                            @php
+                                $value = is_array($item) ? $item[$col] ?? '-' : data_get($item, $col, '-');
+                            @endphp
+
+                            {{-- special: progress --}}
+                            @if ($col === 'progress')
+                                <td class="cu-td">
+                                    <div class="cu-progress">
+                                        <div class="cu-progress-bar" style="width: {{ $value }}%;"></div>
+                                    </div>
+                                    <span class="cu-progress-text">{{ $value }}%</span>
+                                </td>
+                            @else
+                                <td class="cu-td">{{ $value }}</td>
+                            @endif
+                        @endforeach
+
+                        {{-- Actions --}}
+                        @if ($actions)
+                            <td class="cu-td text-end">
+                                <div class="dropdown">
+                                    <button class="btn btn-light btn-sm" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        @if (isset($actions['edit']))
+                                            <li><a class="dropdown-item" href="{{ $actions['edit'] }}">แก้ไข</a></li>
+                                        @endif
+                                        @if (isset($actions['delete']))
+                                            <li><a class="dropdown-item text-danger"
+                                                    href="{{ $actions['delete'] }}">ลบ</a></li>
+                                        @endif
+                                    </ul>
+                                </div>
+
+                            </td>
+                        @endif
+                    </tr>
+
+                @empty
+                    <tr>
+                        <td class="cu-empty" colspan="{{ count($headers) + ($actions ? 1 : 0) }}">
+                            ไม่มีข้อมูล
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
-@endif
 
+    {{-- ClickUp Style --}}
+    <style>
+        .cu-table-wrapper {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .cu-table {
+            border-collapse: separate !important;
+            border-spacing: 0;
+            width: 100%;
+            background: white;
+        }
+
+        .cu-th {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            padding: 14px;
+            border-bottom: 1px solid #f3f4f6;
+            background: #fafafa;
+        }
+
+        .cu-row:hover {
+            background: #f9fafb;
+        }
+
+        .cu-td {
+            font-size: 15px;
+            padding: 14px;
+            border-bottom: 1px solid #f3f4f6;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .cu-empty {
+            padding: 30px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Progress Bar */
+        .cu-progress {
+            width: 120px;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .cu-progress-bar {
+            height: 100%;
+            background: #7c3aed;
+            border-radius: 5px;
+        }
+
+        .cu-progress-text {
+            margin-left: 8px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* + New Item */
+        .cu-new-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .cu-new-item:hover {
+            background: #f3f4f6;
+            border-radius: 8px;
+            color: #4f46e5;
+        }
+    </style>
+
+</div>

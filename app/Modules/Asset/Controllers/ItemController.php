@@ -2,26 +2,28 @@
 
 namespace App\Modules\Asset\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;  // ต้องเพิ่ม
+use App\Modules\Asset\Services\ItemService; // ต้องเพิ่ม
 
-use App\Modules\Asset\Services\AssetService;
-
-class AssetController extends Controller
+class ItemController extends Controller
 {
-
     protected $service;
 
-    public function __construct(AssetService $service)
+    public function __construct(ItemService $service)
     {
         $this->service = $service;
     }
 
+    /**
+     * รายการทรัพย์สินทั้งหมด
+     */
     public function index()
     {
-        $items = $this->service->getAssets();
 
-        return view('Asset::index', [
+        $items = $this->service->getItems();
+
+        return view('Asset::items.index', [
             'items'   => $items,
             'headers' => ['รหัส', 'รหัสพนักงาน', 'ชื่อ', 'ฝ่าย', 'แผนก', 'โครงการ', 'สถานะ'],
             'columns' => ['code', 'employee_id', 'name', 'department', 'division', 'project', 'status'],
@@ -36,15 +38,5 @@ class AssetController extends Controller
             'edit'   => '/assets/edit/__ID__',
             'delete' => '/assets/delete/__ID__',
         ];
-    }
-
-    public function create()
-    {
-        return view('modules.asset.create');
-    }
-
-    public function store(Request $request)
-    {
-        return "กำลังบันทึกข้อมูล (mock)";
     }
 }
