@@ -13,66 +13,26 @@ Minimal Modern
 | -------------------------------- | ------------- | ---------------------------------- | -------------------------- |
 | **Views อยู่ใน resources/views** | ระบบเล็ก      | ง่าย                               | รกเร็ว, แยก feature ไม่ชัด |
 | **Views อยู่ใน Modules/**        | ระบบกลาง–ใหญ่ | แยก feature ชัด, รองรับ enterprise | ต้อง config เพิ่มเล็กน้อย  |
+Modules/
+  Users/
+    Http/
+    Livewire/
+    Models/
+    Views/
+
+Modules/
+  Inventory/
+    Http/
+    Livewire/
+    Views/
 
 app/
-│
-├── Core/                          // ส่วนกลางของระบบ
-│   ├── Http/
-│   │   ├── Controllers/           // Controllers กลาง (Auth/ Dashboard)
-│   │   ├── Middleware/
-│   │   └── Requests/
-│   ├── Models/                    // Models กลาง เช่น User, Role
-│   ├── Traits/                    // Helper สำหรับ Model
-│   ├── Services/                  // Business Core
-│   ├── Repositories/              // กลาง เช่น UserRepository
-│   └── Helpers/
-│
-│
-├── Modules/                       // ทุก Feature แยกเป็น Modules
-│   ├── Asset/
-│   │   ├── Http/
-│   │   │   ├── Controllers/
-│   │   │   ├── Requests/
-│   │   ├── Models/
-│   │   ├── Services/
-│   │   ├── Repositories/
-│   │   ├── Livewire/
-│   │   ├── routes.php
-│   │   └── views/
-│   │         ├── index.blade.php
-│   │         ├── create.blade.php
-│   │         ├── edit.blade.php
-│   │         └── components/      // component ของ Module
-│   │
-│   ├── Counting/
-│   ├── Maintenance/
-│   ├── User/
-│   └── etc...
-│
-│
-├── Support/                       // ส่วนสนับสนุนทั้งระบบ
-│   ├── Menu/
-│   │    └── MenuBuilder.php       // Logic สำหรับเมนู
-│   ├── Enums/
-│   ├── View/
-│   └── Utils/
-│
-└── Providers/
-    ├── AppServiceProvider.php
-    ├── ModuleServiceProvider.php   // Auto Load Modules
-    └── ViewServiceProvider.php     // View Namespace ทุก Module
-
-resources/
-├── views/
-│   ├── layouts/
-│   │     ├── app.blade.php
-│   │     ├── sidebar.blade.php
-│   │     ├── header.blade.php
-│   │     └── footer.blade.php
-│   ├── components/
-│   └── auth/
-│
-└── css/js
+  Livewire/
+    Shared/
+        Table/
+        Filter/
+        Modal/
+        SearchBox/
 
 
 ผลลัพธ์ที่คุณจะได้

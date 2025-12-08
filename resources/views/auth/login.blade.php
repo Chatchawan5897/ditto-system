@@ -67,8 +67,8 @@
 
                 <div class="mb-3">
                     <label class="form-label">อีเมล</label>
-                    <input type="text" name="email" value="SYSASS00" class="form-control form-control-lg"
-                        required autofocus>
+                    <input type="text" name="email" value="SYSASS00" class="form-control form-control-lg" required
+                        autofocus>
                 </div>
 
                 <div class="mb-3">

@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    //
+
     public function index()
     {
-        // dd("function index");
-        return view('dashboard.index');
+        return view('Dashboard::index');
     }
 }

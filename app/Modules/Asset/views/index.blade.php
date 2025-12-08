@@ -1,12 +1,9 @@
-{{-- ditto-system/app/Modules/Asset/views/index.blade.php --}}
-
 @extends('layouts.app')
 
 @section('title', 'Asset List')
 
 
 @section('content')
-
 
     <x-breadcrumb :items="[
         [
@@ -15,7 +12,7 @@
             'route' => 'dashboard.index',
         ],
         [
-            'label' => 'D-AssetCounting',
+            'label' => 'D-Assets',
             'icon' => 'bi bi-folder2',
             'route' => 'asset.index',
         ],
@@ -24,13 +21,5 @@
         ],
     ]" />
 
-    {{-- ทำ filterข้อมูลจาก filter compoennt --}}
-    {{-- <livewire:filter target="asset-table" /> --}}
-
-    {{-- ทำตารางข้อมูลจาก table component --}}
-    {{-- <livewire:asset-table :items="$items" :headers="$headers" :columns="$columns" :actions="$actions" /> --}}
-
-
-
-
+    <livewire:asset-table />
 @endsection

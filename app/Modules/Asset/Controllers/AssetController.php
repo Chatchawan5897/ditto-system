@@ -3,6 +3,7 @@
 namespace App\Modules\Asset\Controllers;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 
 use App\Modules\Asset\Services\AssetService;
@@ -19,14 +20,14 @@ class AssetController extends Controller
 
     public function index()
     {
-        $items = $this->service->getAssets();
+        return view('Asset::index');
 
-        return view('Asset::index', [
-            'items'   => $items,
-            'headers' => ['รหัส', 'รหัสพนักงาน', 'ชื่อ', 'ฝ่าย', 'แผนก', 'โครงการ', 'สถานะ'],
-            'columns' => ['code', 'employee_id', 'name', 'department', 'division', 'project', 'status'],
-            'actions' => $this->getActions(),
-        ]);
+        // return view('Asset::index', [
+        //     // 'items' => $items,
+        //     'headers' => ['รหัส', 'รหัสพนักงาน', 'ชื่อ', 'ฝ่าย', 'แผนก', 'โครงการ', 'สถานะ'],
+        //     'columns' => ['code', 'employee_id', 'name', 'department', 'division', 'project', 'status'],
+        //     'actions' => $this->getActions(),
+        // ]);
     }
 
     protected function getActions()
@@ -36,15 +37,5 @@ class AssetController extends Controller
             'edit'   => '/assets/edit/__ID__',
             'delete' => '/assets/delete/__ID__',
         ];
-    }
-
-    public function create()
-    {
-        return view('modules.asset.create');
-    }
-
-    public function store(Request $request)
-    {
-        return "กำลังบันทึกข้อมูล (mock)";
     }
 }

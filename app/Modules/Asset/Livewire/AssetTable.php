@@ -2,44 +2,47 @@
 
 namespace App\Modules\Asset\Livewire;
 
+use App\Modules\Asset\Livewire\DB;
+
 use Livewire\Component;
-use Livewire\WithPagination;     // <--- เพิ่มตรงนี้
-use App\Modules\Asset\Modules\Item;
+use App\Modules\Shared\Livewire\Table as SharedTable;
+use App\Modules\Asset\Services\AssetService;
+use Livewire\WithPagination;
 
 class AssetTable extends Component
 {
-    use WithPagination;          // <--- เปิดใช้งาน pagination
+    use WithPagination;
 
-    protected $paginationTheme = 'bootstrap'; // ใช้ Bootstrap pagination
+    protected $paginationTheme = 'bootstrap';
 
     public $headers;
     public $columns;
     public $actions;
     public $filters = [];
-    public $items;
 
-    protected $listeners = ['filterUpdated' => 'applyFilter'];
+    protected $service;
 
-    public function mount($items = [], $headers = [], $columns = [], $actions = [])
+    public function boot(AssetService $service)
     {
-        $this->items   = $items;
-        $this->headers = $headers;
-        $this->columns = $columns;
-        $this->actions = $actions;
-    }
+        $this->service = $service;
 
+        // กำหนด headers / columns / actions
+        $this->headers = ['รูปทรัพย์สิน', 'รหัสทรัพย์สิน', 'ชื่อทรัพย์สิน', 'สถานะ'];
+        $this->columns = ['image_item_thumbnail', 'code', 'name_th', 'employee_full', 'status_name_th'];
 
-    // ฟังก์ชันที่ถูกเรียกเมื่อ filter เปลี่ยน
-    public function applyFilter($filters)
-    {
-        $this->filters = $filters;
-        $this->resetPage(); // รีเซ็ตกลับหน้าแรก
+        $this->actions = [
+            ['label' => 'Edit', 'event' => 'editAsset'],
+            ['label' => 'Delete', 'event' => 'deleteAsset']
+        ];
     }
 
     public function render()
     {
-        return view('Asset::livewire.asset-table', [
-            'items' => $this->items,
+        $items = $this->service->getAll(10);
+
+        // dd($items);
+        return view('Asset::livewire.index', [
+            'items' => $items,
             'headers' => $this->headers,
             'columns' => $this->columns,
             'actions' => $this->actions,

@@ -1,0 +1,46 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('doc_rea_send_heads_temporary', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('code');
+            $table->bigInteger('owner_id');
+            $table->bigInteger('location_id');
+            $table->string('other_location')->nullable();
+            $table->string('used_to');
+            $table->bigInteger('shipping_type_id');
+            $table->date('shipping_date_start')->nullable();
+            $table->date('shipping_date_end')->nullable();
+            $table->string('shipping_file')->nullable();
+            $table->text('remark')->nullable();
+            $table->integer('versioning')->default(0);
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+            $table->bigInteger('owner_type')->nullable();
+            $table->integer('location_zone_id')->nullable();
+            $table->integer('buliding_branch_id')->nullable();
+            $table->integer('floor_area_room_id')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('doc_rea_send_heads_temporary');
+    }
+};

@@ -3,35 +3,25 @@
 namespace App\Modules\Asset\Services;
 
 use App\Modules\Asset\Repositories\AssetRepository;
-// AssetService Logic
+
 class AssetService
 {
-    // การนับจำนวน assets , workflow , validate เงื่อนไข business 
-    // การจัดการกระบวนการที่ซับซ้อน เช่น ตรวจนับ → อนุมัติ Service จะเรียกใช้ Repository
-
     protected $repo;
 
     public function __construct(AssetRepository $repo)
     {
         $this->repo = $repo;
     }
-    // ดึงทั้งหมด
-    public function getAssets()
-    {
-        return $this->repo->getAssets();
-    }
 
-    // หาตาม code
-    public function findAsset($id)
+    public function getAll($perPage = 10)
     {
-        return $this->repo->findByCode($id);
-    }
-
-    // ตัวอย่าง Logic เสริม เช่น Filter ตาม status
-    public function filterByStatus($status)
-    {
-        return $this->repo->getAssets()
-            ->where('status', $status)
-            ->values();
+        // ดึงข้อมูลพร้อม pagination
+        return $this->repo->getAll()
+            ->through(function ($item) {
+                // แปลงข้อมูลสำหรับ Table component
+                $item->assets_status_name = $item->status_name ?? '-'; // ถ้า join status table มาแล้ว
+                $item->image_item_thumbnail = $item->image_item_thumbnail ?? null; // URL ของรูปภาพ
+                return $item;
+            });
     }
 }
